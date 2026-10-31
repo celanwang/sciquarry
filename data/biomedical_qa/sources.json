@@ -70,7 +70,7 @@
         "evidence_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0229104",
         "notes": "出版方页面为署名许可；Europe PMC JATS XML 的 permissions 指向 CC BY 4.0。使用时保留作者署名、链接及修改说明，第三方材料另查。"
       },
-      "eligibility": "local_retrieval_candidate_source_errors_flagged_not_training_approved",
+      "eligibility": "manual_review_only_not_for_automatic_qa_or_training",
       "local_asset": {
         "format": "Europe PMC JATS XML",
         "download_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7046262/fullTextXML",
