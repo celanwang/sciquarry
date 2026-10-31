@@ -3,6 +3,7 @@
 - `sources.json`：九篇候选文献的来源、许可线索、本地文件摘要、质量标记与尚待完成的关联核查。
 - `regression_cases.jsonl`：10 个由助手初审问题整理的定向回归案例，均待领域审核。
 - `assistant_fact_review_v1.jsonl`：46 个回答候选片段的助手初审记录，尚待领域审核。
+- `assistant_domain_review_v1.jsonl`：55 条问答样本的助手初步领域审核建议。专家尚未签字；说明见 [助手领域审核报告](../../docs/biomedical-assistant-domain-review.md)。该文件不是训练准入。
 - `review_candidates_p05.jsonl`：12 条基于 P05 新论文的待领域审核候选题；已参与探索性检索，不能作为未公开盲测。
 - `dev_examples.jsonl`：22 条基于 P02 指定证据范围的开发样本草稿，包括可回答、证据边界和不可回答问题。
 
@@ -17,6 +18,8 @@
 P05 专家审核材料见 [P05 审核表](../../docs/biomedical-p05-domain-review.md)。
 
 P02 回答的 [助手初审报告](../../docs/biomedical-assistant-fact-review.md) 与人类专家审核分开保存。
+
+55 条问答样本的 [助手领域审核报告](../../docs/biomedical-assistant-domain-review.md) 也只是初步建议。专家尚未签字。
 
 P06 新增 7 条训练候选草稿见 [sft_candidates_p06.jsonl](sft_candidates_p06.jsonl)，未经专家审核，不是正式 SFT 数据；P06/P07 来源登记及其未完成的关联、许可核对见 [sources.json](sources.json)。
 
