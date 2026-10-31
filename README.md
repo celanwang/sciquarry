@@ -82,3 +82,5 @@ python3 -m unittest discover -s tests -v
 新论文候选题的 [领域审核材料](docs/biomedical-p05-domain-review.md)、[检索探索](docs/biomedical-external-retrieval-exploration.md) 和 [事实断言核对方案](docs/biomedical-fact-review-design.md) 可用于下一阶段的人工审核；其中包含查看证据、导出审核材料和记录人工判断的命令。
 
 P02 基础模型回答的逐项核对结果见 [助手事实初审报告](docs/biomedical-assistant-fact-review.md)；这些结论尚待领域专家复核。
+
+定向回归和微调前数据条件分别见 [回归报告](docs/biomedical-targeted-regression.md) 与 [准备状态](docs/biomedical-pretraining-readiness.md)。
