@@ -78,3 +78,5 @@ python3 -m unittest discover -s tests -v
 ```
 
 项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md)、[样本审核记录](docs/biomedical-qa-sample-review.md) 、[开发基线报告](docs/biomedical-qa-development-baseline.md) 和 [调整回归报告](docs/biomedical-qa-development-followup.md)。
+
+新论文候选题的 [领域审核材料](docs/biomedical-p05-domain-review.md)、[检索探索](docs/biomedical-external-retrieval-exploration.md) 和 [事实断言核对方案](docs/biomedical-fact-review-design.md) 可用于下一阶段的人工审核。
