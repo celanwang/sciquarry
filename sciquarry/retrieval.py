@@ -12,7 +12,20 @@ import xml.etree.ElementTree as ET
 
 
 def _text(element):
-    return " ".join("".join(element.itertext()).split())
+    # JATS may embed full figures or tables inside a paragraph. They have their
+    # own evidence context and must not be silently flattened into body text.
+    excluded = {"fig", "fig-group", "table-wrap", "table-wrap-group", "supplementary-material"}
+
+    def parts(node):
+        if node.text:
+            yield node.text
+        for child in node:
+            if child.tag.rsplit("}", 1)[-1] not in excluded:
+                yield from parts(child)
+            if child.tail:
+                yield child.tail
+
+    return " ".join("".join(parts(element)).split())
 
 
 def index_article(path, source_id, expected_pmcid, source_url):

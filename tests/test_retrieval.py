@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from sciquarry.retrieval import index_article, search
+from sciquarry.retrieval import _text, index_article, search
 
 
 ARTICLE = b'''<article><front><article-meta>
@@ -29,6 +29,11 @@ class RetrievalTest(unittest.TestCase):
         self.assertIn("BCR-Abl", rows[0]["text"])
         self.assertEqual(len(rows[0]["source_sha256"]), 64)
         self.assertEqual(rows, index_article(self.path, "P99", "PMC123", "https://example.org/article"))
+
+    def test_embedded_figure_and_table_are_excluded_with_tail_preserved(self):
+        import xml.etree.ElementTree as ET
+        paragraph = ET.fromstring("<p>Body <italic>text</italic>. <fig><caption>figure content</caption></fig> Tail <table-wrap><caption>table content</caption></table-wrap> end.</p>")
+        self.assertEqual(_text(paragraph), "Body text. Tail end.")
 
     def test_wrong_article_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "PMCID"):
