@@ -34,6 +34,14 @@ class RetrievalTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "PMCID"):
             index_article(self.path, "P99", "PMC999", "https://example.org/article")
 
+    def test_chinese_experiment_terms_retrieve_english_headings(self):
+        records = [
+            {"id": "a", "section_path": ["Differentiation analysis"], "text": "Cells were treated."},
+            {"id": "b", "section_path": ["Cell competition screen"], "text": "A positive control was used."},
+        ]
+        self.assertEqual(search(records, "分化分析")[0]["id"], "a")
+        self.assertEqual(search(records, "阳性对照")[0]["id"], "b")
+
     def test_search_ranks_evidence_and_no_match_is_empty(self):
         rows = index_article(self.path, "P99", "PMC123", "https://example.org/article")
         self.assertEqual(search(rows, "imatinib cells 72")[0]["id"], "P99:1.1:p1")
