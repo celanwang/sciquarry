@@ -23,7 +23,7 @@ python3 -m sciquarry.retrieval search data/local/index/P02.jsonl \
 
 ## 本地证据问答
 
-在本机启动一个支持 OpenAI Chat Completions 接口的模型服务，并确认服务地址和模型标识。以下示例假设其 API 地址为 `http://127.0.0.1:8001/v1`；这里的 `YOUR_MODEL_NAME` 应替换为服务实际提供的模型名称。项目本身不会下载、启动或训练模型。
+在本机启动一个支持 OpenAI Chat Completions 接口的模型服务，并确认服务地址和模型标识。以下示例假设其 API 地址为 `http://127.0.0.1:8001/v1`；这里的 `YOUR_MODEL_NAME` 应替换为服务实际提供的模型名称。该问答入口不会自动下载、启动或训练模型；SFT 训练另有独立入口。
 
 ```bash
 python3 -m sciquarry.ask data/local/index/P02.jsonl \
@@ -84,3 +84,7 @@ python3 -m unittest discover -s tests -v
 P02 基础模型回答的逐项核对结果见 [助手事实初审报告](docs/biomedical-assistant-fact-review.md)；这些结论尚待领域专家复核。
 
 定向回归和微调前数据条件分别见 [回归报告](docs/biomedical-targeted-regression.md) 与 [准备状态](docs/biomedical-pretraining-readiness.md)。
+
+## SFT 训练与评估
+
+已实现基于证据的 MLX LoRA SFT，包括审核数据校验、训练及适配器加载和基础模型对照。项目中的三条虚构样本仅供冒烟；当前尚无经领域专家审核的医学训练集，也没有完成正式医学微调。数据格式、审核、执行命令与本机验证记录见 [SFT 说明](docs/biomedical-sft.md)。
