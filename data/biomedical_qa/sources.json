@@ -1,9 +1,9 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "checked_on": "2026-10-31",
   "status": "catalogued_partial_local_index",
   "notes": [
-    "四篇论文已完成初步文献档案；只有 P02 和 P03 的正文 XML 已下载并建立本地独立索引，文件和索引不提交 Git。",
+    "已登记五篇候选论文；P02、P03、P05 的正文 XML 已建立本地独立索引，原文和索引不提交 Git。",
     "许可核查针对所记录的原文版本与来源；图表、补充材料及具体再利用方式可能需要进一步核查。",
     "研究关联仅做初步核查，样本、数据集及引用链尚未完成系统比对；所有分组均未锁定。"
   ],
@@ -108,6 +108,38 @@
         "notes": "出版方页面标记订阅内容，未见明确可再利用许可；PMC 可访问不代表授权全文入库或训练。"
       },
       "eligibility": "hold_pending_explicit_reuse_rights"
+    },
+    {
+      "id": "P05",
+      "title": "Induction of apoptosis in imatinib sensitive and resistant chronic myeloid leukemia cells by efficient disruption of bcr-abl oncogene with zinc finger nucleases",
+      "doi": "10.1186/s13046-018-0732-4",
+      "pmid": "29554925",
+      "pmcid": "PMC5859405",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5859405/",
+      "model": "K562 and K562/G01; ZFN and donor gene editing experiments",
+      "planned_role": "external_article_candidate_not_locked",
+      "license": {
+        "status": "source_page_identified",
+        "name": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5859405/",
+        "notes": "P05 正文 XML 明示 CC BY 4.0，第三方材料及具体用途仍需核查。"
+      },
+      "eligibility": "exploratory_retrieval_candidate_pending_domain_and_independence_review",
+      "local_asset": {
+        "format": "Europe PMC JATS XML",
+        "download_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5859405/fullTextXML",
+        "raw_path": "data/local/raw/PMC5859405.xml",
+        "index_path": "data/local/index/P05.jsonl",
+        "source_sha256": "a721424547d7dc2be976244ec00d4714415f0531b29e48cce656a112d101fdd5",
+        "paragraphs": 39,
+        "pmc_version": "PMC5859405.1",
+        "accessed_on": "2026-10-31"
+      },
+      "independence_review": {
+        "status": "preliminary_incomplete",
+        "notes": "P05 与 P02/P03 的参考文献中未找到对方 DOI/PMID，但 P05 与 P03 均涉及 K562 来源，P05 的 K562/G01 来源引用其文献 42；共享数据及细胞派生链尚未系统审核。P05 不能称为已证明独立的盲测集。"
+      }
     }
   ],
   "relationship_review": {
@@ -116,7 +148,8 @@
       "P01、P03、P04 均涉及 K562；P03 从 ATCC K562 建立 K562-IR，P04 报道来源于研究者的敏感细胞并逐渐建立耐药株；共同起始细胞系不证明共享实验数据。",
       "P02 的竞争实验使用 Ba/F3 细胞；其研究其他部分涉及其他细胞和患者来源样本，不能仅因 Ba/F3 与 K562 不同就判定全部研究独立。",
       "已对 P02、P03 本地 JATS 参考文献列表中的 DOI/PMID 做直接文本检索，未检出其余三篇候选论文标识；这不排除间接关联、未标识引用或共享数据。",
-      "P01、P04 的完整引用链和补充数据尚未做系统检查；四篇均不足以锁定有代表性的独立测试分组。"
+      "P01、P04 的完整引用链和补充数据尚未做系统检查；四篇均不足以锁定有代表性的独立测试分组。",
+      "P05 与 P02、P03 的 DOI/PMID 在其 JATS 参考文献中未见相互直接引用；P05 与 P03 共用 K562 细胞系，派生与实验数据关联尚未系统审查。"
     ]
   }
 }

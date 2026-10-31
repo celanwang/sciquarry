@@ -79,3 +79,5 @@ python3 -m sciquarry.retrieval ingest data/local/raw/PMC7046262.xml \
 ```
 
 两篇原文下载地址、预期 SHA-256 和段落数记录在 [sources.json](../data/biomedical_qa/sources.json) 的 `local_asset` 字段，可用 `shasum -a 256 data/local/raw/PMC*.xml` 核对。若重新下载后摘要不一致，应视为不同文件版本，复核许可及变更并重新登记，不要直接沿用旧的证据定位。P03 的使用限制仍然适用。
+
+补充：2026-10-31 新增 P05 作为探索性外部论文候选，许可、样本及研究关联检查见 [P05 领域审核材料](biomedical-p05-domain-review.md)；不改变本档案对 P01–P04 的原始记录。
