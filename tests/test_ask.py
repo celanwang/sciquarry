@@ -4,7 +4,7 @@ import unittest
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from unittest.mock import patch
 
-from sciquarry.ask import answer_question, local_chat_url
+from sciquarry.ask import answer_question, inspect_citations, local_chat_url, review_flags
 
 
 RECORDS = [{"id": "P02:1.1:p1", "section_path": ["Results"],
@@ -64,6 +64,20 @@ class AskTest(unittest.TestCase):
         self.assertEqual(result["unknown_citations"], ["P02:9:p9"])
         FakeHandler.answer = "结果没有引用。"
         self.assertEqual(answer_question(RECORDS, "伊马替尼", "test-model", self.url)["citation_status"], "missing")
+
+    def test_mixed_valid_and_malformed_citation_is_not_recognized(self):
+        result = inspect_citations("结论 [P02:1.1:p1]，另见 [1.1:p2]。", {"P02:1.1:p1"})
+        self.assertEqual(result["citation_status"], "malformed_citation")
+        self.assertEqual(result["valid_citations"], ["P02:1.1:p1"])
+        self.assertEqual(result["malformed_citations"], ["1.1:p2"])
+        unknown = inspect_citations("结论 [P02:8:p3]。", {"P02:1.1:p1"})
+        self.assertEqual(unknown["citation_status"], "unknown_citation")
+        self.assertEqual(inspect_citations("见 [1]。", set())["citation_status"], "missing")
+
+    def test_numeric_biological_replicates_require_review(self):
+        self.assertEqual(review_flags("共进行了16次独立生物学重复。"), ["verify_biological_replicate_count"])
+        self.assertEqual(review_flags("There were 3 independent biological replicates."), ["verify_biological_replicate_count"])
+        self.assertEqual(review_flags("片段没有说明独立生物学重复次数。"), [])
 
     def test_no_evidence_does_not_call_model(self):
         with patch("sciquarry.ask.build_opener") as opener:

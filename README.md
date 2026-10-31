@@ -31,7 +31,7 @@ python3 -m sciquarry.ask data/local/index/P02.jsonl \
   --model YOUR_MODEL_NAME --base-url http://127.0.0.1:8001/v1
 ```
 
-问答入口向本机模型服务发送问题与检索出的段落，要求回答附带段落编号，并返回原始回答、候选来源和 `citation_status`。只有匹配 `[P02:1.1:p1]` 这一格式（方括号内允许空格）的编号会被检查：`recognized` 表示至少出现一个已检索编号且未检测到该格式的未知编号，`unknown_citation` 表示发现未知编号，`missing` 表示没有检测到该格式的编号。**这些状态只检查编号，不证明引用支持结论，也不能发现所有格式错误或漏引。** 没有检索结果时程序不会调用模型；检索到结果也不代表足以回答，仍需人工核对。当前不会自动将开发样本限定到它标注的证据范围，所以不能直接用该入口计算样本的正式评估指标。
+问答入口向本机模型服务发送问题与检索出的段落，要求回答附带段落编号，并返回原始回答、候选来源和 `citation_status`。程序检查方括号内类似 `[P02:1.1:p1]` 的段落编号（方括号内允许空格）：`recognized` 表示至少出现一个已检索编号且未检测到未知或残缺编号，`unknown_citation` 表示发现未知编号，`malformed_citation` 表示发现类似段落编号但格式不完整的引用，`missing` 表示没有检测到此类引用。**这些状态只检查方括号内类似段落编号的引用，不证明引用支持结论，也不能发现其他格式错误或漏引。** 没有检索结果时程序不会调用模型；检索到结果也不代表足以回答，仍需人工核对。`review_flags` 中的 `verify_biological_replicate_count` 是对部分数字形式的生物学重复次数陈述发出的人工核对提示，不代表该陈述有误，也不能识别所有说法。当前不会自动将开发样本限定到它标注的证据范围，所以不能直接用该入口计算样本的正式评估指标。
 
 使用本地 MLX-LM 与 Qwen3 时，可添加 `--no-thinking` 来关闭思考模式，避免思考内容占满生成额度：
 
@@ -77,4 +77,4 @@ python3 -m sciquarry.evaluate answer \
 python3 -m unittest discover -s tests -v
 ```
 
-项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md)、[样本审核记录](docs/biomedical-qa-sample-review.md) 和 [开发基线报告](docs/biomedical-qa-development-baseline.md)。
+项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md)、[样本审核记录](docs/biomedical-qa-sample-review.md) 、[开发基线报告](docs/biomedical-qa-development-baseline.md) 和 [调整回归报告](docs/biomedical-qa-development-followup.md)。

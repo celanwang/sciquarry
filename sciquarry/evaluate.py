@@ -74,6 +74,8 @@ def answer_result(sample, by_id, model, base_url, no_thinking):
             "provided_passage_ids": [r["id"] for r in evidence],
             "answer": result["answer"], "citation_status": result["citation_status"],
             "unknown_citations": result["unknown_citations"],
+            "malformed_citations": result.get("malformed_citations", []),
+            "review_flags": result.get("review_flags", []),
             "finish_reason": result.get("finish_reason"),
             "system_fingerprint": result.get("system_fingerprint"),
             "usage": result.get("usage"), "elapsed_seconds": round(time.monotonic() - start, 3),

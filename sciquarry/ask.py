@@ -33,6 +33,39 @@ def local_chat_url(base_url):
     return base_url.rstrip("/") + "/chat/completions"
 
 
+def inspect_citations(answer, known_ids):
+    """Inspect bracketed passage-like identifiers, not factual support or coverage."""
+    valid = set()
+    unknown = set()
+    malformed = set()
+    for match in re.finditer(r"\[([^\[\]\n]*)\]", answer):
+        candidate = match.group(1).strip()
+        if not re.search(r":\s*[pP]\s*\d", candidate):
+            continue
+        if not re.fullmatch(r"[A-Za-z0-9_-]+:[0-9.]+:p[0-9]+", candidate):
+            malformed.add(candidate)
+        elif candidate not in known_ids:
+            unknown.add(candidate)
+        else:
+            valid.add(candidate)
+    status = ("unknown_citation" if unknown else "malformed_citation" if malformed
+              else "recognized" if valid else "missing")
+    return {"citation_status": status, "valid_citations": sorted(valid),
+            "unknown_citations": sorted(unknown), "malformed_citations": sorted(malformed)}
+
+
+def review_flags(answer):
+    """Flag numeric biological replicate claims for manual verification."""
+    patterns = (
+        r"\d+\s*(?:个|次|组)?\s*(?:独立(?:的)?)?生物学重复",
+        r"生物学重复(?:次数)?\s*[为是:：]\s*\d+",
+        r"\b\d+\s+(?:independent\s+)?biological\s+replicates?\b",
+    )
+    return ["verify_biological_replicate_count"] if any(
+        re.search(pattern, answer, re.IGNORECASE) for pattern in patterns
+    ) else []
+
+
 def answer_question(records, question, model, base_url="http://127.0.0.1:8001/v1", top_k=3, timeout=120, no_thinking=False):
     evidence = search(records, question, top_k)
     return answer_with_evidence(evidence, question, model, base_url, timeout, no_thinking)
@@ -75,12 +108,9 @@ def answer_with_evidence(evidence, question, model, base_url="http://127.0.0.1:8
         raise ValueError("model service response does not contain a chat answer") from None
     if not isinstance(answer, str) or not answer.strip():
         raise ValueError("model service returned an empty answer")
-    citations = set(re.findall(r"\[\s*([A-Za-z0-9_-]+:[0-9.]+:p[0-9]+)\s*\]", answer))
-    known = {item["id"] for item in evidence}
-    unknown = sorted(citations - known)
-    status = "unknown_citation" if unknown else ("recognized" if citations else "missing")
-    return {"answer": answer, "sources": evidence, "citation_status": status,
-            "unknown_citations": unknown, "finish_reason": choice.get("finish_reason"),
+    citation_info = inspect_citations(answer, {item["id"] for item in evidence})
+    return {"answer": answer, "sources": evidence, **citation_info,
+            "review_flags": review_flags(answer), "finish_reason": choice.get("finish_reason"),
             "system_fingerprint": result.get("system_fingerprint"), "usage": result.get("usage")}
 
 
