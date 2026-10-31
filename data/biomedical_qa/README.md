@@ -24,3 +24,5 @@ P02 回答的 [助手初审报告](../../docs/biomedical-assistant-fact-review.m
 P06 新增 7 条训练候选草稿见 [sft_candidates_p06.jsonl](sft_candidates_p06.jsonl)，未经专家审核，不是正式 SFT 数据；P06/P07 来源登记及其未完成的关联、许可核对见 [sources.json](sources.json)。
 
 研究关联自动检查说明见 [研究关联审计](../../docs/biomedical-source-relationship-audit.md)。
+
+10 条样本的助手建议修订见 [样本修订记录](../../docs/biomedical-sample-revision-v1.md)。
