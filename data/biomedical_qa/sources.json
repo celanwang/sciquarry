@@ -1,11 +1,11 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "checked_on": "2026-10-31",
-  "status": "candidate_not_ingested",
+  "status": "catalogued_partial_local_index",
   "notes": [
-    "本文献登记仅记录来源与公开许可信息；文献全文尚未下载、索引或完成逐项用途审查。",
-    "初步关联检查仅基于论文页面的作者、机构、模型和方法，不等于已经完成数据集、引用链及实验来源审计。",
-    "所有分组均未锁定；相同细胞系不必然意味着相同实验或数据，尚需核查。"
+    "四篇论文已完成初步文献档案；只有 P02 和 P03 的正文 XML 已下载并建立本地独立索引，文件和索引不提交 Git。",
+    "许可核查针对所记录的原文版本与来源；图表、补充材料及具体再利用方式可能需要进一步核查。",
+    "研究关联仅做初步核查，样本、数据集及引用链尚未完成系统比对；所有分组均未锁定。"
   ],
   "sources": [
     {
@@ -17,8 +17,14 @@
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4244677/",
       "model": "K562; STI571, BCR-ABL1 siRNA and p15INK4B interventions",
       "planned_role": "development_candidate",
-      "license": {"status": "unverified", "name": null, "evidence_url": null},
-      "eligibility": "hold_pending_license_and_relationship_review"
+      "license": {
+        "status": "conflicting_source_statements",
+        "name": null,
+        "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4244677/",
+        "notes": "PMC 页面称署名-非商业许可，SciELO 页面称署名许可；两者不一致，暂缓全文入库及再利用，需核实适用版本与许可。",
+        "conflicting_evidence_url": "https://www.scielo.br/j/bjmbr/a/Hx8FKSwL8gfgLczcPXTCJjd/?lang=en"
+      },
+      "eligibility": "hold_conflicting_license"
     },
     {
       "id": "P02",
@@ -29,8 +35,24 @@
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7948465/",
       "model": "isogenic Ba/F3 WT and BCR–Abl-expressing cells; imatinib competition assay",
       "planned_role": "development_candidate",
-      "license": {"status": "source_page_identified", "name": "CC BY 4.0", "license_url": "https://creativecommons.org/licenses/by/4.0/", "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7948465/", "notes": "原文页面载明许可；正式使用前核实版本、署名和可能单独授权的第三方材料。"},
-      "eligibility": "candidate_pending_use_and_relationship_review"
+      "license": {
+        "status": "source_page_identified",
+        "name": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7948465/",
+        "notes": "原文页面载明许可；正式使用前核实版本、署名和可能单独授权的第三方材料。"
+      },
+      "eligibility": "local_retrieval_candidate_not_training_approved",
+      "local_asset": {
+        "format": "Europe PMC JATS XML",
+        "download_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7948465/fullTextXML",
+        "raw_path": "data/local/raw/PMC7948465.xml",
+        "index_path": "data/local/index/P02.jsonl",
+        "source_sha256": "e3c009d8a3344c86f04459363b4f06845a5d8565d29881cfc4b3a27b919f0fc7",
+        "paragraphs": 50,
+        "pmc_version": null,
+        "accessed_on": "2026-10-31"
+      }
     },
     {
       "id": "P03",
@@ -41,8 +63,34 @@
       "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0229104",
       "model": "K562 and K562-IR derived under imatinib selection",
       "planned_role": "validation_candidate_unlocked",
-      "license": {"status": "source_page_identified", "name": "Creative Commons Attribution", "license_url": null, "evidence_url": "https://journals.plos.org/plosone/article/file?id=10.1371%2Fjournal.pone.0229104&type=printable", "notes": "出版方标明署名许可；具体版本及第三方材料尚需核实。"},
-      "eligibility": "candidate_pending_use_and_relationship_review"
+      "license": {
+        "status": "source_page_identified",
+        "name": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0229104",
+        "notes": "出版方页面为署名许可；Europe PMC JATS XML 的 permissions 指向 CC BY 4.0。使用时保留作者署名、链接及修改说明，第三方材料另查。"
+      },
+      "eligibility": "local_retrieval_candidate_source_errors_flagged_not_training_approved",
+      "local_asset": {
+        "format": "Europe PMC JATS XML",
+        "download_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC7046262/fullTextXML",
+        "raw_path": "data/local/raw/PMC7046262.xml",
+        "index_path": "data/local/index/P03.jsonl",
+        "source_sha256": "37438c9bb2eabca9237ad53803a6afc1475621b72e335191cbee7d2148291965",
+        "paragraphs": 33,
+        "pmc_version": "PMC7046262.1",
+        "accessed_on": "2026-10-31"
+      },
+      "source_quality_flags": [
+        {
+          "location": "Materials and methods > Cell lines; P03:2.1:p1",
+          "issue": "原文出现 daily uptake of 400g 的患者用药表述，疑似单位笔误；不要根据猜测修正或输出为临床剂量，待权威更正或领域审核。"
+        },
+        {
+          "location": "Results > K652-IR...; P03:3.1",
+          "issue": "小节标题写 K652-IR，与正文 K562-IR 不一致；保留原样并提示待核实。"
+        }
+      ]
     },
     {
       "id": "P04",
@@ -53,16 +101,22 @@
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8891420/",
       "model": "K562, KCL22 and KU812 sensitive and imatinib-resistant cell lines",
       "planned_role": "test_candidate_unlocked",
-      "license": {"status": "unverified", "name": null, "evidence_url": null},
-      "eligibility": "hold_pending_license_and_relationship_review"
+      "license": {
+        "status": "unverified",
+        "name": null,
+        "evidence_url": "https://link.springer.com/article/10.1007/s12079-021-00647-x",
+        "notes": "出版方页面标记订阅内容，未见明确可再利用许可；PMC 可访问不代表授权全文入库或训练。"
+      },
+      "eligibility": "hold_pending_explicit_reuse_rights"
     }
   ],
   "relationship_review": {
     "status": "preliminary_incomplete",
     "observations": [
-      "P01、P03、P04 均涉及 K562；P03 和 P04 均研究伊马替尼耐药模型，需要检查细胞来源、实验数据及衍生关系。",
-      "P02 的主要对照使用 Ba/F3，但论文亦涉及其他细胞与患者样本；不能仅因模型不同就认定研究完全独立。",
-      "尚未完成文献间引用链、补充材料、共享数据及实验来源核查；不得按当前候选角色锁定最终分组。"
+      "P01、P03、P04 均涉及 K562；P03 从 ATCC K562 建立 K562-IR，P04 报道来源于研究者的敏感细胞并逐渐建立耐药株；共同起始细胞系不证明共享实验数据。",
+      "P02 的竞争实验使用 Ba/F3 细胞；其研究其他部分涉及其他细胞和患者来源样本，不能仅因 Ba/F3 与 K562 不同就判定全部研究独立。",
+      "已对 P02、P03 本地 JATS 参考文献列表中的 DOI/PMID 做直接文本检索，未检出其余三篇候选论文标识；这不排除间接关联、未标识引用或共享数据。",
+      "P01、P04 的完整引用链和补充数据尚未做系统检查；四篇均不足以锁定有代表性的独立测试分组。"
     ]
   }
 }

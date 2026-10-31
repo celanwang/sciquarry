@@ -1,6 +1,6 @@
 # 医学科研问答试点：伊马替尼与 CML 临床前研究
 
-状态：方案草案。候选文献登记与待审核开发样本见 [data/biomedical_qa](../data/biomedical_qa/README.md)；尚未建立文献语料或完成模型评估。
+状态：方案草案。文献档案见 [biomedical-literature-catalog.md](biomedical-literature-catalog.md)，文献登记与待审核开发样本见 [data/biomedical_qa](../data/biomedical_qa/README.md)；已建立两篇文章的本地检索索引，尚未完成模型评估。
 目标读者：参与项目设计、数据整理与实验评估的人员。
 
 ## 目标与边界
@@ -17,10 +17,10 @@
 
 | 编号 | 论文与标识 | 适合的问题 | 使用状态 |
 | --- | --- | --- | --- |
-| P01 | [A combination of STI571 and BCR-ABL1 siRNA with overexpressed p15INK4B induced enhanced proliferation inhibition and apoptosis in chronic myeloid leukemia](https://pmc.ncbi.nlm.nih.gov/articles/PMC4244677/)，PMID 25387678 | K562 细胞中的增殖、凋亡，区分 STI571 单独处理与联合干预；结果和 Fig. 1–2 | 开发候选；具体许可待核实 |
-| P02 | [A cell competition–based small molecule screen identifies a novel compound that induces dual c-Myc depletion and p53 activation](https://pmc.ncbi.nlm.nih.gov/articles/PMC7948465/)，PMID 33303632，DOI 10.1074/jbc.RA120.015285 | BCR–Abl 表达的 Ba/F3 细胞与野生型细胞在伊马替尼处理下的对照；Results 的细胞竞争筛选部分和 Fig. 1 | 开发候选；论文页面标明 CC BY 4.0，使用前核对适用范围 |
-| P03 | [Adaptive phenotypic modulations lead to therapy resistance in chronic myeloid leukemia cells](https://pmc.ncbi.nlm.nih.gov/articles/PMC7046262/)，PMID 32106243，DOI 10.1371/journal.pone.0229104 | K562 及耐药细胞模型的构建与表型；Methods 和相关 Results | 验证候选；出版方标明署名许可，具体版本待核实 |
-| P04 | [Atypical activation of signaling downstream of inactivated Bcr-Abl mediates chemoresistance in chronic myeloid leukemia](https://pmc.ncbi.nlm.nih.gov/articles/PMC8891420/)，PMID 34596797 | 敏感与耐药 CML 细胞模型、处理条件及信号变化；Methods 和相关 Results | 测试候选；具体许可待核实 |
+| P01 | [A combination of STI571 and BCR-ABL1 siRNA with overexpressed p15INK4B induced enhanced proliferation inhibition and apoptosis in chronic myeloid leukemia](https://pmc.ncbi.nlm.nih.gov/articles/PMC4244677/)，PMID 25387678 | K562 细胞中的增殖、凋亡，区分 STI571 单独处理与联合干预；结果和 Fig. 1–2 | 开发候选；来源许可表述冲突，暂不入库 |
+| P02 | [A cell competition–based small molecule screen identifies a novel compound that induces dual c-Myc depletion and p53 activation](https://pmc.ncbi.nlm.nih.gov/articles/PMC7948465/)，PMID 33303632，DOI 10.1074/jbc.RA120.015285 | BCR–Abl 表达的 Ba/F3 细胞与野生型细胞在伊马替尼处理下的对照；Results 的细胞竞争筛选部分和 Fig. 1 | 开发候选；正文已建索引，CC BY 4.0 |
+| P03 | [Adaptive phenotypic modulations lead to therapy resistance in chronic myeloid leukemia cells](https://pmc.ncbi.nlm.nih.gov/articles/PMC7046262/)，PMID 32106243，DOI 10.1371/journal.pone.0229104 | K562 及耐药细胞模型的构建与表型；Methods 和相关 Results | 验证候选；正文已建索引，CC BY 4.0，原文质量待复核 |
+| P04 | [Atypical activation of signaling downstream of inactivated Bcr-Abl mediates chemoresistance in chronic myeloid leukemia](https://pmc.ncbi.nlm.nih.gov/articles/PMC8891420/)，PMID 34596797 | 敏感与耐药 CML 细胞模型、处理条件及信号变化；Methods 和相关 Results | 测试候选；出版方显示订阅内容，再利用许可待核实 |
 
 P03、P04 的分组仅为初始方案：正式锁定前应检查共同数据、实验来源、重叠结论和近重复文献。强关联论文应归为同一组，并补充独立论文，避免一篇论文同时贡献训练和测试问题。四篇不足以支持稳健的泛化结论；先用来验证流程，再扩充。
 
