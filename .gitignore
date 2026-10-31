@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local source documents, generated indexes, models and experiment outputs
+/data/local/
+/models/
+/runs/

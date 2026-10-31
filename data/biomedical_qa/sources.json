@@ -1,0 +1,68 @@
+{
+  "version": "0.1.0",
+  "checked_on": "2026-10-31",
+  "status": "candidate_not_ingested",
+  "notes": [
+    "本文献登记仅记录来源与公开许可信息；文献全文尚未下载、索引或完成逐项用途审查。",
+    "初步关联检查仅基于论文页面的作者、机构、模型和方法，不等于已经完成数据集、引用链及实验来源审计。",
+    "所有分组均未锁定；相同细胞系不必然意味着相同实验或数据，尚需核查。"
+  ],
+  "sources": [
+    {
+      "id": "P01",
+      "title": "A combination of STI571 and BCR-ABL1 siRNA with overexpressed p15INK4B induced enhanced proliferation inhibition and apoptosis in chronic myeloid leukemia",
+      "doi": "10.1590/1414-431X20143734",
+      "pmid": "25387678",
+      "pmcid": "PMC4244677",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4244677/",
+      "model": "K562; STI571, BCR-ABL1 siRNA and p15INK4B interventions",
+      "planned_role": "development_candidate",
+      "license": {"status": "unverified", "name": null, "evidence_url": null},
+      "eligibility": "hold_pending_license_and_relationship_review"
+    },
+    {
+      "id": "P02",
+      "title": "A cell competition–based small molecule screen identifies a novel compound that induces dual c-Myc depletion and p53 activation",
+      "doi": "10.1074/jbc.RA120.015285",
+      "pmid": "33303632",
+      "pmcid": "PMC7948465",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7948465/",
+      "model": "isogenic Ba/F3 WT and BCR–Abl-expressing cells; imatinib competition assay",
+      "planned_role": "development_candidate",
+      "license": {"status": "source_page_identified", "name": "CC BY 4.0", "license_url": "https://creativecommons.org/licenses/by/4.0/", "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7948465/", "notes": "原文页面载明许可；正式使用前核实版本、署名和可能单独授权的第三方材料。"},
+      "eligibility": "candidate_pending_use_and_relationship_review"
+    },
+    {
+      "id": "P03",
+      "title": "Adaptive phenotypic modulations lead to therapy resistance in chronic myeloid leukemia cells",
+      "doi": "10.1371/journal.pone.0229104",
+      "pmid": "32106243",
+      "pmcid": "PMC7046262",
+      "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0229104",
+      "model": "K562 and K562-IR derived under imatinib selection",
+      "planned_role": "validation_candidate_unlocked",
+      "license": {"status": "source_page_identified", "name": "Creative Commons Attribution", "license_url": null, "evidence_url": "https://journals.plos.org/plosone/article/file?id=10.1371%2Fjournal.pone.0229104&type=printable", "notes": "出版方标明署名许可；具体版本及第三方材料尚需核实。"},
+      "eligibility": "candidate_pending_use_and_relationship_review"
+    },
+    {
+      "id": "P04",
+      "title": "Atypical activation of signaling downstream of inactivated Bcr-Abl mediates chemoresistance in chronic myeloid leukemia",
+      "doi": "10.1007/s12079-021-00647-x",
+      "pmid": "34596797",
+      "pmcid": "PMC8891420",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8891420/",
+      "model": "K562, KCL22 and KU812 sensitive and imatinib-resistant cell lines",
+      "planned_role": "test_candidate_unlocked",
+      "license": {"status": "unverified", "name": null, "evidence_url": null},
+      "eligibility": "hold_pending_license_and_relationship_review"
+    }
+  ],
+  "relationship_review": {
+    "status": "preliminary_incomplete",
+    "observations": [
+      "P01、P03、P04 均涉及 K562；P03 和 P04 均研究伊马替尼耐药模型，需要检查细胞来源、实验数据及衍生关系。",
+      "P02 的主要对照使用 Ba/F3，但论文亦涉及其他细胞与患者样本；不能仅因模型不同就认定研究完全独立。",
+      "尚未完成文献间引用链、补充材料、共享数据及实验来源核查；不得按当前候选角色锁定最终分组。"
+    ]
+  }
+}
