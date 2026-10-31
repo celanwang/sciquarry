@@ -35,6 +35,56 @@ python3 -m sciquarry.claim_review \\
 
 可观察到，`dev-p02-022` 的一个片段把 16 个阳性对照孔称为 16 次独立生物学重复，尽管引用编号存在；所给段落不能支持这一重复次数。应区分“证据未说明”与“证据证明相反”，并交领域专家复核。`dev-p02-009` 则在 72 小时比例的陈述中未明确 DMSO 条件；审核应检查被省略的限定是否改变解释。
 
+## 人工审核工作区
+
+已在本机生成空白审核材料 `data/local/evaluations/claim-review-packet-v1.md`，包含 22 个完整回答、对应原文段落和 46 个候选片段。该文件只是初始快照，不显示后续审核进度；本地文件被 Git 忽略，分享前需核对各文献许可与署名。
+
+本机准备好候选片段后，也可以使用新文件名重新导出空白材料：
+
+```bash
+python3 -m sciquarry.review_workspace export \
+  --candidates data/local/evaluations/claim-review-candidates-v2.jsonl \
+  --answers data/local/evaluations/answer-v4.jsonl \
+  --index data/local/index/P02.jsonl \
+  --output data/local/evaluations/claim-review-packet-new.md
+```
+
+通过工作区可以查看指定候选、原问题、完整回答和提供给模型的证据：
+
+```bash
+python3 -m sciquarry.review_workspace show \
+  --candidates data/local/evaluations/claim-review-candidates-v2.jsonl \
+  --answers data/local/evaluations/answer-v4.jsonl \
+  --index data/local/index/P02.jsonl --id dev-p02-022:2
+```
+
+查看记录数而不创建审核文件：
+
+```bash
+python3 -m sciquarry.review_workspace summary \
+  --candidates data/local/evaluations/claim-review-candidates-v2.jsonl \
+  --answers data/local/evaluations/answer-v4.jsonl \
+  --index data/local/index/P02.jsonl \
+  --reviews data/local/evaluations/human-reviews.jsonl
+```
+
+经实际审核后，审核者可用 `record` 追加一条记录，指定候选 ID、从候选原文中选取的精确断言、判断、审核者和理由。`supported` 与 `contradicted` 还要求提供本次给模型的段落编号及该段中的精确原文片段；`insufficient_evidence`、`out_of_scope` 和 `not_a_claim` 同样要求理由。以下是**填写格式示例，尚未执行，也不是专家结论**；审核者需根据自己的判断替换占位符：
+
+```bash
+python3 -m sciquarry.review_workspace record \
+  --candidates data/local/evaluations/claim-review-candidates-v2.jsonl \
+  --answers data/local/evaluations/answer-v4.jsonl \
+  --index data/local/index/P02.jsonl \
+  --reviews data/local/evaluations/human-reviews.jsonl \
+  --id dev-p02-022:2 --claim '16次独立生物学重复' \
+  --decision insufficient_evidence --reviewer REVIEWER_ID \
+  --note '请替换为审核者自己的判断理由'
+```
+
+工具校验候选、回答和索引文件的 SHA-256，并检查断言与证据引文是否能在对应文本中精确找到；**它不检查证据是否真的支持判断，也不验证审核者身份或专业资质**。当前每条记录只能绑定一个证据段落和一个引文；需要联合多个段落才能判断的断言应拆分或线下复核，不能视为工具已完整覆盖。不同审核者可分别记录；同一审核者修订同一断言时，需用 `--supersedes` 指向其当前事件 ID。错误记录可用 `withdrawn` 与 `--supersedes` 撤回，再重新记录；原记录保留。
+
+`summary` 只统计有无记录，不代表每个候选中的全部断言已经审核。当前日志采用本地追加写入，不提供多进程并发锁、身份认证或防篡改签名；多人审核时应串行写入，保留原始日志与备份，不把该原型当作生产审核系统。
+
 ## 后续验证
 
 将模型裁判或自然语言推断用于辅助排序前，先由领域审核者标注一组覆盖上述风险的独立样本，明确证据和分歧，再与人工判定逐项比较，并报告支持、反驳、证据不足各类的错误以及无法判断比例。多模型一致也不能替代专业审阅；未经验证的自动标签不应作为医学事实或正式评测金标准。
