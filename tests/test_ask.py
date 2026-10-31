@@ -19,7 +19,7 @@ class FakeHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         body = self.rfile.read(int(self.headers["Content-Length"]))
         self.requests.append((self.path, json.loads(body)))
-        payload = json.dumps({"choices": [{"message": {"content": self.answer}}]}).encode()
+        payload = json.dumps({"choices": [{"message": {"content": self.answer}, "finish_reason": "stop"}]}).encode()
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
@@ -46,14 +46,19 @@ class AskTest(unittest.TestCase):
     def test_sends_only_retrieved_evidence_and_returns_source(self):
         result = answer_question(RECORDS, "伊马替尼处理细胞多久？", "test-model", self.url)
         self.assertEqual(result["citation_status"], "recognized")
+        self.assertEqual(result["finish_reason"], "stop")
         self.assertEqual(result["sources"][0]["id"], "P02:1.1:p1")
         path, request = FakeHandler.requests[0]
         self.assertEqual(path, "/v1/chat/completions")
         self.assertEqual(request["model"], "test-model")
         self.assertIn("[P02:1.1:p1] Imatinib", request["messages"][1]["content"])
 
+    def test_no_thinking_is_explicitly_opt_in(self):
+        answer_question(RECORDS, "伊马替尼", "test-model", self.url, no_thinking=True)
+        self.assertEqual(FakeHandler.requests[0][1]["chat_template_kwargs"], {"enable_thinking": False})
+
     def test_unknown_and_missing_citations_are_flagged(self):
-        FakeHandler.answer = "结果。[P02:9:p9]"
+        FakeHandler.answer = "结果。[ P02:9:p9 ]"
         result = answer_question(RECORDS, "伊马替尼", "test-model", self.url)
         self.assertEqual(result["citation_status"], "unknown_citation")
         self.assertEqual(result["unknown_citations"], ["P02:9:p9"])
