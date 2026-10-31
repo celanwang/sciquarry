@@ -1,6 +1,6 @@
 # 试点文献与开发样本
 
-- `sources.json`：五篇候选文献的来源、许可线索、本地文件摘要、质量标记与尚待完成的关联核查。
+- `sources.json`：九篇候选文献的来源、许可线索、本地文件摘要、质量标记与尚待完成的关联核查。
 - `regression_cases.jsonl`：10 个由助手初审问题整理的定向回归案例，均待领域审核。
 - `assistant_fact_review_v1.jsonl`：46 个回答候选片段的助手初审记录，尚待领域审核。
 - `review_candidates_p05.jsonl`：12 条基于 P05 新论文的待领域审核候选题；已参与探索性检索，不能作为未公开盲测。
@@ -19,3 +19,5 @@ P05 专家审核材料见 [P05 审核表](../../docs/biomedical-p05-domain-revie
 P02 回答的 [助手初审报告](../../docs/biomedical-assistant-fact-review.md) 与人类专家审核分开保存。
 
 P06 新增 7 条训练候选草稿见 [sft_candidates_p06.jsonl](sft_candidates_p06.jsonl)，未经专家审核，不是正式 SFT 数据；P06/P07 来源登记及其未完成的关联、许可核对见 [sources.json](sources.json)。
+
+研究关联自动检查说明见 [研究关联审计](../../docs/biomedical-source-relationship-audit.md)。
