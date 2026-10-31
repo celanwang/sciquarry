@@ -89,4 +89,6 @@ P02 基础模型回答的逐项核对结果见 [助手事实初审报告](docs/b
 
 已实现基于证据的 MLX LoRA SFT，包括审核数据校验、训练及适配器加载和基础模型对照。项目中的三条虚构样本仅供冒烟；当前尚无经领域专家审核的医学训练集，也没有完成正式医学微调。数据格式、审核、执行命令与本机验证记录见 [SFT 说明](docs/biomedical-sft.md)。
 
-领域专家的审核材料、可填写审核表及新来源候选见 [审核与数据准备工作流](docs/biomedical-domain-review-workflow.md)。当前 41 条样本均待审核。
+领域专家的审核材料、可填写审核表及新来源候选见 [审核与数据准备工作流](docs/biomedical-domain-review-workflow.md)。当前最新交接包含 55 条样本，均待审核。
+
+候选文献自动关联检查见 [研究关联审计](docs/biomedical-source-relationship-audit.md)。

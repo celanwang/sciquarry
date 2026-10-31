@@ -4,16 +4,16 @@
 
 ## 本批材料与范围
 
-本机工作包 `data/local/domain-review/qa-v5/` 包含：
+本机工作包 `data/local/domain-review/qa-v6/` 包含：
 
-- `packet.md`：41 道问题、草拟回答及对应的原文段落。P02 开发题 22 条、P05 既有候选题 12 条、P06 新训练候选草稿 7 条。所有内容均待领域审核。
+- `packet.md`：55 道问题、草拟回答及对应的原文段落。P02 开发题 22 条、P05 既有候选题 12 条、P06 新训练候选草稿 7 条、P08 草稿 6 条、P09 草稿 8 条。所有内容均待领域审核。
 - `reviews.csv`：每题一行的空白审核表，供审核人填写。`sample_id` 必须与审核包一致。
 - `cases.jsonl`：与审核包绑定的原始题目、参考答案和证据快照。
 - `manifest.json`：样本、索引和快照摘要；用于发现文件变化，不是防篡改签名。
 - `reviewer-instructions.md`：可随包交付的专家填写说明。
 - `source-attribution.md`：本包文献的作者、来源、许可链接和修改说明。分享前仍需核实版本、第三方材料和具体用途。
 
-P02/P05 已用于公开开发或探索；P06 的题目已构建并用于本审核包。它们都不是全新盲测题。P02/P05 来源受现有训练准入保护；P06 的 7 条也不是已审核样本。该包是**审核工作包，不是训练数据**。
+P02/P05 已用于公开开发或探索；P06/P08/P09 草稿也已进入审核包。它们都不是全新盲测题。P02/P05 来源受现有训练准入保护；新增草稿也不是已审核样本。该包是**审核工作包，不是训练数据**。
 
 P02 的模型回答事实断言另有本机材料 `data/local/evaluations/claim-review-packet-v1.md`。这与本包的参考答案审阅是两个工作：前者审核模型已经输出的具体断言，后者审核样本问题、证据与参考答案。不要将某一项通过视为另一项通过；事实断言记录方法见 [事实审核方案](biomedical-fact-review-design.md)。
 
@@ -58,8 +58,11 @@ python3 -m sciquarry.domain_review export \
   --samples data/biomedical_qa/dev_examples.jsonl \
   --samples data/biomedical_qa/review_candidates_p05.jsonl \
   --samples data/biomedical_qa/sft_candidates_p06.jsonl \
+  --samples data/biomedical_qa/sft_candidates_p08.jsonl \
+  --samples data/biomedical_qa/sft_candidates_p09.jsonl \
   --index data/local/index/P02.jsonl --index data/local/index/P05.jsonl \
-  --index data/local/index/P06.jsonl \
+  --index data/local/index/P06.jsonl --index data/local/index/P08.jsonl \
+  --index data/local/index/P09.jsonl \
   --output data/local/domain-review/qa-new
 
 python3 -m sciquarry.domain_review check \
@@ -70,8 +73,11 @@ python3 -m sciquarry.domain_review check \
 
 ## 新来源与正式 SFT 待办
 
-- **P06**：[Busch 等，2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10685629/)，DOI `10.1186/s12964-023-01363-2`。已有 7 条仅限正文段落的训练候选草稿，尚未审定来源许可的具体训练用途或医学内容。该研究包含多种培养条件和患者来源细胞，不能将某一条件下的结论泛化到患者治疗。
-- **P07**：[Troadec 等，2015](https://pmc.ncbi.nlm.nih.gov/articles/PMC4504225/)，DOI `10.1186/s12929-015-0163-x`。已建立本地索引，暂未编题或确定用途。该研究包含 K562/KCL22 耐药模型和 BaF3 模型；其 CDK 抑制剂结果不能直接当成伊马替尼结果。
-- 两篇本地 JATS 均声明 CC BY 4.0，需分别核实实际用途、版本、署名及第三方材料。参见 [来源登记](../data/biomedical_qa/sources.json)。对 P02/P03/P05/P06/P07 的本地参考文献做过其他四篇 DOI、PMID 和 PMCID 的直接文本查找，未检出直接标识；这是不完整的关联检查，不能证明研究独立。P06/P07 与既有研究涉及共同细胞系，还需核对细胞派生、实验、作者和数据来源。P07 未指定为测试集，也未认定为盲测来源。
-- 审核后的修改必须形成新版本并重新绑定审阅，不能只修改 `decision` 直接导入训练。准备更多合适来源并完成训练、验证、独立测试的关联分组、近重复排查、权限记录和专家审核后，再固定基线及评估规则。现有 7 条草稿和两篇候选论文远不足以证明训练集有规模或代表性。
-- 正式训练启动前，还需用 [SFT 数据准入流程](biomedical-sft.md) 校验每条来源、训练用途和专家审核摘要，并在未参与开发或训练的测试集上锁定基础模型基线。比较时按事实支持、证据引用、实验条件、拒答、风险错误等预先约定规则复核，不能只看 loss。
+- **P06**：[Busch 等，2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10685629/)，DOI `10.1186/s12964-023-01363-2`。已有 7 条仅限正文段落的训练候选草稿，尚未审定来源许可的具体训练用途或医学内容。
+- **P07**：[Troadec 等，2015](https://pmc.ncbi.nlm.nih.gov/articles/PMC4504225/)，DOI `10.1186/s12929-015-0163-x`。已建立本地索引，暂未编题或确定用途。
+- **P08**：[Adnan Awad 等，2021](https://pmc.ncbi.nlm.nih.gov/articles/PMC8257498/)，DOI `10.1038/s41375-020-01082-4`。已有 6 条训练候选草稿；含患者样本与细胞模型，回答须区分证据层级。
+- **P09**：[Tsubaki 等，2017](https://pmc.ncbi.nlm.nih.gov/articles/PMC5503566/)，DOI `10.18632/oncotarget.16314`。已有 8 条训练候选草稿；以 K562/IR 耐药亚系为主，许可线索为 CC BY 3.0。
+- 对已索引来源的自动关联信号检查见 [研究关联审计](biomedical-source-relationship-audit.md)。自动未命中不能证明独立；共享细胞系仍需人工审核。
+- 审核后的修改必须形成新版本并重新绑定审阅，不能只修改 `decision` 直接导入训练。准备更多合适来源并完成训练、验证、独立测试的关联分组、近重复排查、权限记录和专家审核后，再固定基线及评估规则。
+
+当前交接包也可使用本机压缩文件 `data/local/domain-review/expert-qa-v6.zip`；分享前请核对许可与署名材料。
