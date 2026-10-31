@@ -52,4 +52,4 @@ python3 -m sciquarry.ask data/local/index/P02.jsonl \
 python3 -m unittest discover -s tests -v
 ```
 
-项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md) 和 [医学问答数据说明](data/biomedical_qa/README.md)。
+项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md) 和 [样本审核记录](docs/biomedical-qa-sample-review.md)。
