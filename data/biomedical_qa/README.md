@@ -1,6 +1,7 @@
 # 试点文献与开发样本
 
 - `sources.json`：五篇候选文献的来源、许可线索、本地文件摘要、质量标记与尚待完成的关联核查。
+- `assistant_fact_review_v1.jsonl`：46 个回答候选片段的助手初审记录，尚待领域审核。
 - `review_candidates_p05.jsonl`：12 条基于 P05 新论文的待领域审核候选题；已参与探索性检索，不能作为未公开盲测。
 - `dev_examples.jsonl`：22 条基于 P02 指定证据范围的开发样本草稿，包括可回答、证据边界和不可回答问题。
 
@@ -13,3 +14,5 @@
 逐题初审和领域审核要求见 [样本审核记录](../../docs/biomedical-qa-sample-review.md)。
 
 P05 专家审核材料见 [P05 审核表](../../docs/biomedical-p05-domain-review.md)。
+
+P02 回答的 [助手初审报告](../../docs/biomedical-assistant-fact-review.md) 与人类专家审核分开保存。

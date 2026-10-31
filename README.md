@@ -77,6 +77,8 @@ python3 -m sciquarry.evaluate answer \
 python3 -m unittest discover -s tests -v
 ```
 
-项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md)、[样本审核记录](docs/biomedical-qa-sample-review.md) 、[开发基线报告](docs/biomedical-qa-development-baseline.md) 和 [调整回归报告](docs/biomedical-qa-development-followup.md)。
+项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md)、[样本审核记录](docs/biomedical-qa-sample-review.md)、[开发基线报告](docs/biomedical-qa-development-baseline.md) 和 [调整回归报告](docs/biomedical-qa-development-followup.md)。
 
 新论文候选题的 [领域审核材料](docs/biomedical-p05-domain-review.md)、[检索探索](docs/biomedical-external-retrieval-exploration.md) 和 [事实断言核对方案](docs/biomedical-fact-review-design.md) 可用于下一阶段的人工审核；其中包含查看证据、导出审核材料和记录人工判断的命令。
+
+P02 基础模型回答的逐项核对结果见 [助手事实初审报告](docs/biomedical-assistant-fact-review.md)；这些结论尚待领域专家复核。
