@@ -34,10 +34,15 @@ def local_chat_url(base_url):
 
 
 def answer_question(records, question, model, base_url="http://127.0.0.1:8001/v1", top_k=3, timeout=120, no_thinking=False):
+    evidence = search(records, question, top_k)
+    return answer_with_evidence(evidence, question, model, base_url, timeout, no_thinking)
+
+
+def answer_with_evidence(evidence, question, model, base_url="http://127.0.0.1:8001/v1", timeout=120, no_thinking=False):
+    """Generate with the supplied passages only; never perform retrieval here."""
     if not question.strip() or not model.strip():
         raise ValueError("question and model must not be empty")
     url = local_chat_url(base_url)
-    evidence = search(records, question, top_k)
     if not evidence:
         return {"answer": "未检索到相关证据，无法根据当前文献回答。", "sources": [],
                 "citation_status": "no_evidence", "unknown_citations": []}
@@ -75,7 +80,8 @@ def answer_question(records, question, model, base_url="http://127.0.0.1:8001/v1
     unknown = sorted(citations - known)
     status = "unknown_citation" if unknown else ("recognized" if citations else "missing")
     return {"answer": answer, "sources": evidence, "citation_status": status,
-            "unknown_citations": unknown, "finish_reason": choice.get("finish_reason")}
+            "unknown_citations": unknown, "finish_reason": choice.get("finish_reason"),
+            "system_fingerprint": result.get("system_fingerprint"), "usage": result.get("usage")}
 
 
 def main(argv=None):

@@ -46,10 +46,35 @@ python3 -m sciquarry.ask data/local/index/P02.jsonl \
 
 为避免意外发送文献和问题，当前问答入口只支持本机 loopback 地址，并禁用 HTTP 重定向。它不提供认证、流式输出、联网搜索、临床安全审核或自动事实核验。
 
+## 开发集评估
+
+试点开发样本由助手初审，尚未经领域专家审核；仅可用于诊断，不能作为独立医学能力测试。评估结果写入 Git 忽略的本地目录，使用新的输出文件名以避免覆盖已有结果。
+
+检索评估记录前 3 条候选是否包含人工标注的段落：
+
+```bash
+python3 -m sciquarry.evaluate retrieval \
+  --samples data/biomedical_qa/dev_examples.jsonl \
+  --index data/local/index/P02.jsonl --top-k 3 \
+  --output data/local/evaluations/retrieval-new.jsonl
+```
+
+回答评估直接向模型提供每题指定的证据，不调用检索。先启动本机 MLX-LM 服务，再运行：
+
+```bash
+python3 -m sciquarry.evaluate answer \
+  --samples data/biomedical_qa/dev_examples.jsonl \
+  --index data/local/index/P02.jsonl \
+  --model ./models/Qwen3-4B --base-url http://127.0.0.1:8080/v1 \
+  --no-thinking --output data/local/evaluations/answer-new.jsonl
+```
+
+每次运行会记录数据与代码摘要、参数、逐题结果及结束状态；回答仍需人工逐题核对。`any_hit` 和 `all_hit` 只表示是否命中已标注的段落，标注并不保证穷尽所有可支持答案的段落。输出文件以独占方式创建，中断时保留已有逐题结果；重新运行需使用新的文件名。
+
 运行基础检查：
 
 ```bash
 python3 -m unittest discover -s tests -v
 ```
 
-项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md) 和 [样本审核记录](docs/biomedical-qa-sample-review.md)。
+项目方案、文献整理和待审核样本分别见 [试点方案](docs/biomedical-qa-pilot.md)、[文献档案](docs/biomedical-literature-catalog.md)、[医学问答数据说明](data/biomedical_qa/README.md)、[样本审核记录](docs/biomedical-qa-sample-review.md) 和 [开发基线报告](docs/biomedical-qa-development-baseline.md)。
