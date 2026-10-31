@@ -4,7 +4,7 @@
 
 ## 本批材料与范围
 
-本机工作包 `data/local/domain-review/qa-v6/` 包含：
+本机工作包 `data/local/domain-review/qa-v7/` 包含：
 
 - `packet.md`：55 道问题、草拟回答及对应的原文段落。P02 开发题 22 条、P05 既有候选题 12 条、P06 新训练候选草稿 7 条、P08 草稿 6 条、P09 草稿 8 条。所有内容均待领域审核。
 - `reviews.csv`：每题一行的空白审核表，供审核人填写。`sample_id` 必须与审核包一致。
@@ -13,7 +13,7 @@
 - `reviewer-instructions.md`：可随包交付的专家填写说明。
 - `source-attribution.md`：本包文献的作者、来源、许可链接和修改说明。分享前仍需核实版本、第三方材料和具体用途。
 
-P02/P05 已用于公开开发或探索；P06/P08/P09 草稿也已进入审核包。它们都不是全新盲测题。P02/P05 来源受现有训练准入保护；新增草稿也不是已审核样本。该包是**审核工作包，不是训练数据**。
+P02/P05 已用于公开开发或探索；P06/P08/P09 草稿也已进入审核包。它们都不是全新盲测题。P02/P05 来源受现有训练准入保护；新增草稿也不是已审核样本。该包是**审核工作包，不是训练数据**。其中 10 条已按助手初审建议修订，说明见 [样本修订记录](biomedical-sample-revision-v1.md)。
 
 P02 的模型回答事实断言另有本机材料 `data/local/evaluations/claim-review-packet-v1.md`。这与本包的参考答案审阅是两个工作：前者审核模型已经输出的具体断言，后者审核样本问题、证据与参考答案。不要将某一项通过视为另一项通过；事实断言记录方法见 [事实审核方案](biomedical-fact-review-design.md)。
 
@@ -80,4 +80,4 @@ python3 -m sciquarry.domain_review check \
 - 对已索引来源的自动关联信号检查见 [研究关联审计](biomedical-source-relationship-audit.md)。自动未命中不能证明独立；共享细胞系仍需人工审核。
 - 审核后的修改必须形成新版本并重新绑定审阅，不能只修改 `decision` 直接导入训练。准备更多合适来源并完成训练、验证、独立测试的关联分组、近重复排查、权限记录和专家审核后，再固定基线及评估规则。
 
-当前交接包也可使用本机压缩文件 `data/local/domain-review/expert-qa-v6.zip`；分享前请核对许可与署名材料。
+当前交接包也可使用本机压缩文件 `data/local/domain-review/expert-qa-v7.zip`；分享前请核对许可与署名材料。

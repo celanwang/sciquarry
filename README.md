@@ -92,3 +92,5 @@ P02 基础模型回答的逐项核对结果见 [助手事实初审报告](docs/b
 领域专家的审核材料、可填写审核表及新来源候选见 [审核与数据准备工作流](docs/biomedical-domain-review-workflow.md)。当前最新交接包含 55 条样本，均待审核。助手对这 55 条的初步建议见 [助手领域审核报告](docs/biomedical-assistant-domain-review.md)；专家尚未签字，正式审核表仍全部待填。
 
 候选文献自动关联检查见 [研究关联审计](docs/biomedical-source-relationship-audit.md)。
+
+助手初审后的样本修订见 [样本修订记录](docs/biomedical-sample-revision-v1.md)；最新专家交接包为本机 `data/local/domain-review/expert-qa-v7.zip`。

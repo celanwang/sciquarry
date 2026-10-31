@@ -30,3 +30,5 @@
 专家审核包、填写说明和新来源候选见 [领域审核与数据准备](biomedical-domain-review-workflow.md)。
 
 候选文献的自动关联信号与人工审核表见 [研究关联审计](biomedical-source-relationship-audit.md)。
+
+10 条助手建议修订已落地，见 [样本修订记录](biomedical-sample-revision-v1.md)；专家审核尚未开始。
