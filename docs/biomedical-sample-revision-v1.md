@@ -25,6 +25,6 @@
 
 ## 后续
 
-1. 将 `expert-qa-v7.zip` 交给领域专家独立填写。
+1. 将 `expert-qa-v7.zip` 交给领域专家；推荐本机 `python3 -m sciquarry.domain_review serve --packet …/qa-v7` 打开填写页，或使用包内 `review-form.html` / `reviews.csv`。
 2. 专家确认后再决定是否纳入正式 SFT 数据准入流程；助手修订不能跳过专家审核。
 3. 若专家要求再改，应形成新版本并重新绑定审阅，不要只改结论字段。

@@ -8,6 +8,7 @@
 
 - `packet.md`：55 道问题、草拟回答及对应的原文段落。P02 开发题 22 条、P05 既有候选题 12 条、P06 新训练候选草稿 7 条、P08 草稿 6 条、P09 草稿 8 条。所有内容均待领域审核。
 - `reviews.csv`：每题一行的空白审核表，供审核人填写。`sample_id` 必须与审核包一致。
+- `review-form.html`：同屏展示问题、草拟答案与证据的本地填写页；可离线打开并下载更新后的 `reviews.csv`，也可用本机 `serve` 直接写回表格。
 - `cases.jsonl`：与审核包绑定的原始题目、参考答案和证据快照。
 - `manifest.json`：样本、索引和快照摘要；用于发现文件变化，不是防篡改签名。
 - `reviewer-instructions.md`：可随包交付的专家填写说明。
@@ -28,7 +29,16 @@ P02 的模型回答事实断言另有本机材料 `data/local/evaluations/claim-
 
 ## 审核表填写
 
-使用表格软件打开 `reviews.csv`，保持 UTF-8、列名和 `sample_id` 不变。按 `packet.md` 的对应 ID 阅读问题、草拟回答与证据，在该行填写：
+推荐使用本地填写页（问题、证据与表单同屏）：
+
+```bash
+python3 -m sciquarry.domain_review serve \
+  --packet data/local/domain-review/qa-v7
+```
+
+浏览器打开终端打印的本机地址（默认 `http://127.0.0.1:8765/`）。顶部填写审核人、背景与日期后，逐题选择判断并点“保存本题”，结果直接写入该工作包的 `reviews.csv`。“检查整表”会运行与 CLI 相同的字段一致性校验。此服务默认只监听本机，不认证身份，也不判断专业结论。
+
+也可直接打开包内 `review-form.html`（离线）。离线保存会下载完整 `reviews.csv`，请用该文件替换工作包中的同名文件。仍可用表格软件编辑 `reviews.csv`；保持 UTF-8、列名和 `sample_id` 不变。按填写页、`packet.md` 或表格中的对应 ID 阅读问题、草拟回答与证据，填写：
 
 | 字段 | 可填写内容 |
 | --- | --- |
@@ -67,9 +77,15 @@ python3 -m sciquarry.domain_review export \
 
 python3 -m sciquarry.domain_review check \
   --packet data/local/domain-review/qa-new
+
+python3 -m sciquarry.domain_review form \
+  --packet data/local/domain-review/qa-new
+
+python3 -m sciquarry.domain_review serve \
+  --packet data/local/domain-review/qa-new
 ```
 
-导出前会校验问题所指证据与来源摘要是否匹配；检查会确认快照完整、审核 ID 一一对应、表格字段和结论一致，并汇总各状态。该工具不读取专家身份凭证、不比对外部论文原文与索引、也不判断事实真伪。每份工作包的 `source-attribution.md` 应根据实际来源另行准备，并在分享前复核；此文件不属于自动生成或自动校验的内容。
+`export` 会同时生成空白 `reviews.csv` 与离线 `review-form.html`。`form` 可在不重建工作包的情况下刷新填写页。导出前会校验问题所指证据与来源摘要是否匹配；检查会确认快照完整、审核 ID 一一对应、表格字段和结论一致，并汇总各状态。该工具不读取专家身份凭证、不比对外部论文原文与索引、也不判断事实真伪。每份工作包的 `source-attribution.md` 应根据实际来源另行准备，并在分享前复核；此文件不属于自动生成或自动校验的内容。
 
 ## 新来源与正式 SFT 待办
 

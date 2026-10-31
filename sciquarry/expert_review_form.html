@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>领域专家问答审核</title>
+<style>
+:root {
+  --ink: #18212b;
+  --muted: #5b6775;
+  --line: #c9d2dc;
+  --paper: #f7f9fb;
+  --panel: #ffffff;
+  --accent: #0d5c63;
+  --accent-soft: #d7eef0;
+  --warn: #8a4b12;
+  --warn-soft: #f7e7d4;
+  --bad: #8b2e2e;
+  --bad-soft: #f6dede;
+  --ok: #1f5d3a;
+  --ok-soft: #d9efe3;
+  --pending: #5b6775;
+  --pending-soft: #e8edf2;
+  --serif: "Iowan Old Style", "Palatino Linotype", "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+  --sans: "Avenir Next", "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+body { display: flex; flex-direction: column; min-height: 100vh; }
+button, select, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: var(--accent); }
+.banner {
+  background: #10232a;
+  color: #edf4f5;
+  padding: 0.7rem 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+.banner strong { color: #fff; }
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.85rem;
+  align-items: end;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel);
+}
+.brand { font-family: var(--serif); font-size: 1.25rem; letter-spacing: 0.01em; }
+.brand span { display: block; color: var(--muted); font-family: var(--sans); font-size: 0.82rem; margin-top: 0.2rem; }
+.profile {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(9rem, 14rem));
+  gap: 0.55rem;
+}
+.profile label, .field label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+.profile input, .field input, .field select, .field textarea, .search {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.45rem 0.55rem;
+  background: #fff;
+}
+.field textarea { min-height: 5.5rem; resize: vertical; line-height: 1.45; }
+.layout {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 15.5rem minmax(0, 1.35fr) minmax(19rem, 0.95fr);
+  min-height: 0;
+}
+.sidebar, .reader, .editor {
+  min-height: 0;
+  overflow: auto;
+}
+.sidebar {
+  border-right: 1px solid var(--line);
+  background: #eef3f6;
+  padding: 0.75rem;
+}
+.search { margin-bottom: 0.65rem; }
+.progress {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.65rem;
+}
+.nav-item {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  border-radius: 6px;
+  padding: 0.45rem 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.35rem;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+.nav-item:hover { background: rgba(255,255,255,0.7); }
+.nav-item.active { background: #fff; box-shadow: inset 0 0 0 1px var(--line); }
+.nav-item .id { font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.badge {
+  font-size: 0.68rem;
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+  background: var(--pending-soft);
+  color: var(--pending);
+  white-space: nowrap;
+}
+.badge.approve { background: var(--ok-soft); color: var(--ok); }
+.badge.revise { background: var(--warn-soft); color: var(--warn); }
+.badge.exclude { background: var(--bad-soft); color: var(--bad); }
+.badge.draft { background: #e7e1f5; color: #4d3f78; }
+.reader { padding: 1rem 1.15rem 2rem; }
+.reader h2 {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  margin: 0 0 0.85rem;
+  font-weight: 600;
+}
+.block {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.85rem 0.95rem;
+  margin-bottom: 0.85rem;
+}
+.block h3 {
+  margin: 0 0 0.55rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+}
+.prose {
+  font-family: var(--serif);
+  white-space: pre-wrap;
+  line-height: 1.55;
+  font-size: 1.02rem;
+}
+.meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.45rem; line-height: 1.4; }
+.passage + .passage { margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px dashed var(--line); }
+.editor {
+  border-left: 1px solid var(--line);
+  background: var(--panel);
+  padding: 0.9rem 1rem 1.4rem;
+}
+.editor h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+}
+.hint { color: var(--muted); font-size: 0.82rem; margin-bottom: 0.85rem; line-height: 1.4; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+.field { margin-bottom: 0.65rem; }
+.checks { display: grid; gap: 0.45rem; margin-bottom: 0.75rem; }
+.check-row {
+  display: grid;
+  grid-template-columns: 1fr 8.5rem;
+  gap: 0.45rem;
+  align-items: center;
+}
+.check-row span { font-size: 0.86rem; }
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(to top, #fff 70%, rgba(255,255,255,0));
+  padding-top: 0.85rem;
+}
+.actions button {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+.actions button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.actions button:disabled { opacity: 0.55; cursor: not-allowed; }
+.status {
+  margin-top: 0.75rem;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  padding: 0.55rem 0.65rem;
+  border-radius: 6px;
+  background: var(--pending-soft);
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+.status.ok { background: var(--ok-soft); }
+.status.err { background: var(--bad-soft); }
+.status.warn { background: var(--warn-soft); }
+.mode-tag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  font-size: 0.72rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  vertical-align: middle;
+}
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 12.5rem 1fr; }
+  .editor { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
+  .profile { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .topbar, .layout { display: block; }
+  .profile { grid-template-columns: 1fr; }
+  .sidebar { max-height: 14rem; }
+  .check-row { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="banner">
+  <strong>待领域专家独立审核。</strong>
+  本页不能认证身份，也不能代替医学正确性判断；填写结果仅写入本机审核表，不能直接授权训练。
+  判断须限定在列出的证据；超出部分请记入“额外证据”。
+</div>
+<header class="topbar">
+  <div class="brand">Sciquarry 领域专家审核<span id="packet-meta">加载中…</span></div>
+  <div class="profile">
+    <div>
+      <label for="profile-reviewer">审核人</label>
+      <input id="profile-reviewer" autocomplete="name" placeholder="姓名或署名">
+    </div>
+    <div>
+      <label for="profile-background">专业背景</label>
+      <input id="profile-background" placeholder="如：血液肿瘤 / 细胞实验">
+    </div>
+    <div>
+      <label for="profile-date">审核日期</label>
+      <input id="profile-date" type="date">
+    </div>
+  </div>
+</header>
+<main class="layout">
+  <aside class="sidebar">
+    <input class="search" id="search" type="search" placeholder="筛选 sample_id">
+    <div class="progress" id="progress"></div>
+    <div id="nav"></div>
+  </aside>
+  <section class="reader" id="reader"></section>
+  <section class="editor">
+    <h2>本题审核 <span class="mode-tag" id="mode-tag">本地</span></h2>
+    <p class="hint">未完成的题目请保持 pending。完成判断后再保存；修订时至少填写修改建议或改正答案之一。</p>
+    <div class="field">
+      <label for="decision">decision</label>
+      <select id="decision">
+        <option value="pending">pending（未完成）</option>
+        <option value="approve">approve（通过）</option>
+        <option value="revise">revise（需修改）</option>
+        <option value="exclude">exclude（排除）</option>
+      </select>
+    </div>
+    <div class="checks" id="checks"></div>
+    <div class="grid-2">
+      <div class="field">
+        <label for="reviewer">本题审核人</label>
+        <input id="reviewer">
+      </div>
+      <div class="field">
+        <label for="reviewed_at">本题日期</label>
+        <input id="reviewed_at" type="date">
+      </div>
+    </div>
+    <div class="field">
+      <label for="reviewer_background">本题背景</label>
+      <input id="reviewer_background">
+    </div>
+    <div class="field">
+      <label for="rationale">理由 rationale</label>
+      <textarea id="rationale" placeholder="通过时也请说明核对范围"></textarea>
+    </div>
+    <div class="field">
+      <label for="proposed_changes">修改建议 proposed_changes</label>
+      <textarea id="proposed_changes"></textarea>
+    </div>
+    <div class="field">
+      <label for="corrected_answer">改正答案 corrected_answer</label>
+      <textarea id="corrected_answer"></textarea>
+    </div>
+    <div class="field">
+      <label for="additional_evidence">额外证据 additional_evidence</label>
+      <textarea id="additional_evidence" placeholder="来源、定位与用途；无则留空"></textarea>
+    </div>
+    <div class="actions">
+      <button type="button" class="primary" id="btn-save">保存本题</button>
+      <button type="button" id="btn-apply-profile">填入顶部署名</button>
+      <button type="button" id="btn-reset">恢复为 pending</button>
+      <button type="button" id="btn-prev">上一题</button>
+      <button type="button" id="btn-next">下一题</button>
+      <button type="button" id="btn-validate">检查整表</button>
+      <button type="button" id="btn-download">下载 reviews.csv</button>
+    </div>
+    <div class="status" id="status">打开题目后即可填写。</div>
+  </section>
+</main>
+<script>
+const PAYLOAD = /*__SCIQUARRY_PAYLOAD__*/null;
+const CHECKS = ["question_scope","evidence_support","conditions_and_numbers","citation_alignment","risk_and_limits"];
+const CHECK_LABELS = {
+  question_scope: "问题范围",
+  evidence_support: "证据支持",
+  conditions_and_numbers: "条件与数字",
+  citation_alignment: "引用对应",
+  risk_and_limits: "风险与局限"
+};
+const CHECK_VALUES = ["pending","pass","needs_change","uncertain","not_applicable"];
+const DECISIONS = ["pending","approve","revise","exclude"];
+const FIELDS = ["sample_id","decision",...CHECKS.map(k=>"check_"+k),"reviewer","reviewer_background","reviewed_at","rationale","proposed_changes","corrected_answer","additional_evidence"];
+
+function blankReview(sampleId) {
+  const row = {sample_id: sampleId, decision: "pending"};
+  for (const k of CHECKS) row["check_"+k] = "pending";
+  for (const k of ["reviewer","reviewer_background","reviewed_at","rationale","proposed_changes","corrected_answer","additional_evidence"]) row[k] = "";
+  return row;
+}
+
+function nonempty(v) { return typeof v === "string" && v.trim().length > 0; }
+
+function validateRow(row) {
+  if (!DECISIONS.includes(row.decision)) return "无效 decision";
+  for (const k of CHECKS) {
+    if (!CHECK_VALUES.includes(row["check_"+k])) return "无效检查项: "+k;
+  }
+  if (row.decision === "pending") {
+    const filled = ["reviewer","reviewer_background","reviewed_at","rationale","proposed_changes","corrected_answer","additional_evidence"].some(k => nonempty(row[k]));
+    const checksDirty = CHECKS.some(k => row["check_"+k] !== "pending");
+    if (filled || checksDirty) return "未完成题目须保持 pending，且检查项与备注留空；如要保存草稿，请先在浏览器中继续编辑，完成后再保存。";
+    return null;
+  }
+  for (const k of ["reviewer","reviewer_background","reviewed_at","rationale"]) {
+    if (!nonempty(row[k])) return "请填写审核人、背景、日期与理由";
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(row.reviewed_at)) return "日期须为 YYYY-MM-DD";
+  if (CHECKS.some(k => row["check_"+k] === "pending")) return "请完成全部五项检查";
+  if (row.decision === "approve" && CHECKS.some(k => !["pass","not_applicable"].includes(row["check_"+k]))) {
+    return "approve 要求五项均为 pass 或 not_applicable";
+  }
+  if (row.decision === "revise" && !(nonempty(row.proposed_changes) || nonempty(row.corrected_answer))) {
+    return "revise 须填写 proposed_changes 或 corrected_answer";
+  }
+  return null;
+}
+
+function csvEscape(value) {
+  const text = value == null ? "" : String(value);
+  if (/[",\n\r]/.test(text)) return '"' + text.replace(/"/g, '""') + '"';
+  return text;
+}
+
+function toCsv(rows) {
+  const lines = [FIELDS.join(",")];
+  for (const sampleId of state.order) {
+    const row = state.reviews[sampleId];
+    lines.push(FIELDS.map(f => csvEscape(row[f] || "")).join(","));
+  }
+  return lines.join("\r\n") + "\r\n";
+}
+
+function parseCsv(text) {
+  const rows = [];
+  let i = 0, field = "", row = [], inQuotes = false;
+  const pushField = () => { row.push(field); field = ""; };
+  const pushRow = () => { rows.push(row); row = []; };
+  while (i < text.length) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i+1] === '"') { field += '"'; i += 2; continue; }
+        inQuotes = false; i++; continue;
+      }
+      field += c; i++; continue;
+    }
+    if (c === '"') { inQuotes = true; i++; continue; }
+    if (c === ",") { pushField(); i++; continue; }
+    if (c === "\n") { pushField(); pushRow(); i++; continue; }
+    if (c === "\r") { i++; continue; }
+    field += c; i++;
+  }
+  if (field.length || row.length) { pushField(); pushRow(); }
+  if (!rows.length) throw new Error("CSV 为空");
+  const header = rows[0].map(h => h.replace(/^\ufeff/, ""));
+  if (header.join(",") !== FIELDS.join(",")) throw new Error("CSV 列名不匹配");
+  const out = {};
+  for (const cells of rows.slice(1)) {
+    if (cells.length === 1 && cells[0] === "") continue;
+    const obj = {};
+    FIELDS.forEach((f, idx) => obj[f] = cells[idx] || "");
+    if (!obj.sample_id) throw new Error("缺少 sample_id");
+    out[obj.sample_id] = obj;
+  }
+  return out;
+}
+
+const state = {
+  live: !!(PAYLOAD && PAYLOAD.live),
+  cases: (PAYLOAD && PAYLOAD.cases) || [],
+  order: [],
+  reviews: {},
+  dirty: {},
+  index: 0,
+  filter: ""
+};
+
+function initState() {
+  state.order = state.cases.map(c => c.sample_id);
+  const incoming = {};
+  for (const row of (PAYLOAD.reviews || [])) incoming[row.sample_id] = Object.assign(blankReview(row.sample_id), row);
+  for (const id of state.order) state.reviews[id] = incoming[id] || blankReview(id);
+  const today = new Date().toISOString().slice(0, 10);
+  document.getElementById("profile-date").value = today;
+  document.getElementById("mode-tag").textContent = state.live ? "本机服务·可写回" : "离线·下载CSV";
+  const meta = PAYLOAD.meta || {};
+  document.getElementById("packet-meta").textContent =
+    (meta.packet_name || "审核包") + " · " + state.order.length + " 题 · " + (meta.notice || "自声明审核，未认证");
+  const checks = document.getElementById("checks");
+  checks.innerHTML = CHECKS.map(k =>
+    `<div class="check-row"><span>${CHECK_LABELS[k]} <code>check_${k}</code></span>
+     <select data-check="${k}">${CHECK_VALUES.map(v => `<option value="${v}">${v}</option>`).join("")}</select></div>`
+  ).join("");
+}
+
+function counts() {
+  const c = {pending:0, approve:0, revise:0, exclude:0, draft:0};
+  for (const id of state.order) {
+    if (state.dirty[id]) c.draft += 1;
+    c[state.reviews[id].decision] = (c[state.reviews[id].decision] || 0) + 1;
+  }
+  return c;
+}
+
+function setStatus(text, kind) {
+  const el = document.getElementById("status");
+  el.textContent = text;
+  el.className = "status" + (kind ? " " + kind : "");
+}
+
+function currentId() { return state.order[state.index]; }
+
+function readFormInto(row) {
+  row.decision = document.getElementById("decision").value;
+  for (const k of CHECKS) row["check_"+k] = document.querySelector(`select[data-check="${k}"]`).value;
+  row.reviewer = document.getElementById("reviewer").value;
+  row.reviewer_background = document.getElementById("reviewer_background").value;
+  row.reviewed_at = document.getElementById("reviewed_at").value;
+  row.rationale = document.getElementById("rationale").value;
+  row.proposed_changes = document.getElementById("proposed_changes").value;
+  row.corrected_answer = document.getElementById("corrected_answer").value;
+  row.additional_evidence = document.getElementById("additional_evidence").value;
+  return row;
+}
+
+function writeForm(row) {
+  document.getElementById("decision").value = row.decision || "pending";
+  for (const k of CHECKS) document.querySelector(`select[data-check="${k}"]`).value = row["check_"+k] || "pending";
+  document.getElementById("reviewer").value = row.reviewer || "";
+  document.getElementById("reviewer_background").value = row.reviewer_background || "";
+  document.getElementById("reviewed_at").value = row.reviewed_at || "";
+  document.getElementById("rationale").value = row.rationale || "";
+  document.getElementById("proposed_changes").value = row.proposed_changes || "";
+  document.getElementById("corrected_answer").value = row.corrected_answer || "";
+  document.getElementById("additional_evidence").value = row.additional_evidence || "";
+}
+
+function markDirty() {
+  const id = currentId();
+  if (!id) return;
+  readFormInto(state.reviews[id]);
+  state.dirty[id] = true;
+  renderNav();
+}
+
+function renderNav() {
+  const c = counts();
+  document.getElementById("progress").textContent =
+    `pending ${c.pending} · approve ${c.approve} · revise ${c.revise} · exclude ${c.exclude}` +
+    (c.draft ? ` · 未保存草稿 ${c.draft}` : "");
+  const q = state.filter.trim().toLowerCase();
+  const nav = document.getElementById("nav");
+  nav.innerHTML = state.order.map((id, idx) => {
+    if (q && !id.toLowerCase().includes(q)) return "";
+    const decision = state.reviews[id].decision;
+    const cls = state.dirty[id] ? "draft" : decision;
+    const label = state.dirty[id] ? "draft" : decision;
+    return `<button type="button" class="nav-item${idx===state.index?" active":""}" data-index="${idx}">
+      <span class="id">${id}</span><span class="badge ${cls}">${label}</span></button>`;
+  }).join("");
+}
+
+function renderCase() {
+  const item = state.cases[state.index];
+  if (!item) { document.getElementById("reader").innerHTML = "<p>无样本</p>"; return; }
+  const passages = (item.passages || []).map(p =>
+    `<div class="passage">
+      <div class="meta"><code>${escapeHtml(p.id)}</code> · ${escapeHtml((p.section_path||[]).join(" > "))} · <a href="${escapeAttr(p.source_url||"#")}" target="_blank" rel="noopener">${escapeHtml(p.source_url||"")}</a></div>
+      <div class="prose">${escapeHtml(p.text||"")}</div>
+    </div>`
+  ).join("");
+  document.getElementById("reader").innerHTML = `
+    <h2>${escapeHtml(item.sample_id)}</h2>
+    <div class="block"><h3>问题</h3><div class="prose">${escapeHtml(item.question||"")}</div></div>
+    <div class="block"><h3>答题范围</h3><div class="prose">${escapeHtml(item.evidence_scope||"仅依据列出的证据。")}</div></div>
+    <div class="block"><h3>草拟参考回答（待审核）</h3><div class="prose">${escapeHtml(item.reference_answer||"")}</div>
+      <div class="meta" style="margin-top:0.55rem">答案可得性：${escapeHtml(String(item.answerability||""))}</div></div>
+    <div class="block"><h3>证据</h3>${passages || "<p class='meta'>无证据段落</p>"}</div>`;
+  writeForm(state.reviews[item.sample_id]);
+  renderNav();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+}
+function escapeAttr(s) { return escapeHtml(s).replace(/`/g, "&#96;"); }
+
+function applyProfile() {
+  document.getElementById("reviewer").value = document.getElementById("profile-reviewer").value;
+  document.getElementById("reviewer_background").value = document.getElementById("profile-background").value;
+  document.getElementById("reviewed_at").value = document.getElementById("profile-date").value;
+  markDirty();
+}
+
+function resetPending() {
+  const id = currentId();
+  state.reviews[id] = blankReview(id);
+  state.dirty[id] = true;
+  writeForm(state.reviews[id]);
+  renderNav();
+  setStatus("已恢复为 pending（尚未写入文件）。", "warn");
+}
+
+async function saveCurrent() {
+  const id = currentId();
+  const row = readFormInto(Object.assign({}, state.reviews[id]));
+  if (row.decision !== "pending") {
+    if (!nonempty(row.reviewer)) row.reviewer = document.getElementById("profile-reviewer").value;
+    if (!nonempty(row.reviewer_background)) row.reviewer_background = document.getElementById("profile-background").value;
+    if (!nonempty(row.reviewed_at)) row.reviewed_at = document.getElementById("profile-date").value;
+  }
+  const err = validateRow(row);
+  if (err) { setStatus(err, "err"); return; }
+  state.reviews[id] = row;
+  if (state.live) {
+    try {
+      const res = await fetch("/api/review", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({review: row})
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "保存失败");
+      delete state.dirty[id];
+      renderNav();
+      setStatus("已写入 reviews.csv（" + id + "）。\n" + JSON.stringify(data.decisions || data, null, 2), "ok");
+    } catch (e) {
+      setStatus(String(e.message || e), "err");
+    }
+  } else {
+    delete state.dirty[id];
+    downloadCsv();
+    renderNav();
+    setStatus("离线模式：已按当前整表下载 reviews.csv。请用该文件替换工作包中的同名文件后运行 check。", "ok");
+  }
+}
+
+function downloadCsv() {
+  const blob = new Blob([toCsv(state.reviews)], {type: "text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "reviews.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+async function validateAll() {
+  for (const id of state.order) {
+    const err = validateRow(state.reviews[id]);
+    if (err) { setStatus(id + ": " + err, "err"); return; }
+  }
+  if (state.live) {
+    try {
+      const res = await fetch("/api/check");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "检查失败");
+      setStatus("整表检查通过。\n" + JSON.stringify(data, null, 2), "ok");
+    } catch (e) {
+      setStatus(String(e.message || e), "err");
+    }
+  } else {
+    setStatus("客户端规则检查通过。离线包请另运行：python3 -m sciquarry.domain_review check --packet <目录>", "ok");
+  }
+}
+
+function goto(index) {
+  if (index < 0 || index >= state.order.length) return;
+  if (currentId()) readFormInto(state.reviews[currentId()]);
+  state.index = index;
+  renderCase();
+  setStatus("正在审核 " + currentId(), "");
+}
+
+function bind() {
+  document.getElementById("nav").addEventListener("click", e => {
+    const btn = e.target.closest("[data-index]");
+    if (btn) goto(Number(btn.dataset.index));
+  });
+  document.getElementById("search").addEventListener("input", e => {
+    state.filter = e.target.value; renderNav();
+  });
+  document.getElementById("decision").addEventListener("change", markDirty);
+  document.getElementById("checks").addEventListener("change", markDirty);
+  for (const id of ["reviewer","reviewer_background","reviewed_at","rationale","proposed_changes","corrected_answer","additional_evidence"]) {
+    document.getElementById(id).addEventListener("input", markDirty);
+  }
+  document.getElementById("btn-save").addEventListener("click", saveCurrent);
+  document.getElementById("btn-apply-profile").addEventListener("click", applyProfile);
+  document.getElementById("btn-reset").addEventListener("click", resetPending);
+  document.getElementById("btn-prev").addEventListener("click", () => goto(state.index - 1));
+  document.getElementById("btn-next").addEventListener("click", () => goto(state.index + 1));
+  document.getElementById("btn-validate").addEventListener("click", validateAll);
+  document.getElementById("btn-download").addEventListener("click", () => {
+    if (currentId()) readFormInto(state.reviews[currentId()]);
+    downloadCsv();
+    setStatus("已下载当前内存中的 reviews.csv。", "ok");
+  });
+  document.addEventListener("keydown", e => {
+    if (e.target.matches("input, textarea, select")) return;
+    if (e.key === "j" || e.key === "J") goto(state.index + 1);
+    if (e.key === "k" || e.key === "K") goto(state.index - 1);
+  });
+}
+
+if (!PAYLOAD || !Array.isArray(PAYLOAD.cases)) {
+  document.body.innerHTML = "<p style='padding:2rem'>审核表单缺少样本数据。请通过 domain_review form 或 serve 生成。</p>";
+} else {
+  initState();
+  bind();
+  goto(0);
+}
+</script>
+</body>
+</html>
