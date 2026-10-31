@@ -17,3 +17,5 @@
 P05 专家审核材料见 [P05 审核表](../../docs/biomedical-p05-domain-review.md)。
 
 P02 回答的 [助手初审报告](../../docs/biomedical-assistant-fact-review.md) 与人类专家审核分开保存。
+
+P06 新增 7 条训练候选草稿见 [sft_candidates_p06.jsonl](sft_candidates_p06.jsonl)，未经专家审核，不是正式 SFT 数据；P06/P07 来源登记及其未完成的关联、许可核对见 [sources.json](sources.json)。

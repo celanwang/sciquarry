@@ -1,9 +1,9 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "checked_on": "2026-10-31",
-  "status": "catalogued_partial_local_index",
+  "status": "catalogued_sft_preparation",
   "notes": [
-    "已登记五篇候选论文；P02、P03、P05 的正文 XML 已建立本地独立索引，原文和索引不提交 Git。",
+    "已登记七篇候选论文；P02、P03、P05、P06、P07 的正文 XML 已建立本地独立索引，原文和索引不提交 Git；P03 仍仅供人工阅览。",
     "许可核查针对所记录的原文版本与来源；图表、补充材料及具体再利用方式可能需要进一步核查。",
     "研究关联仅做初步核查，样本、数据集及引用链尚未完成系统比对；所有分组均未锁定。"
   ],
@@ -140,6 +140,70 @@
         "status": "preliminary_incomplete",
         "notes": "P05 与 P02/P03 的参考文献中未找到对方 DOI/PMID，但 P05 与 P03 均涉及 K562 来源，P05 的 K562/G01 来源引用其文献 42；共享数据及细胞派生链尚未系统审核。P05 不能称为已证明独立的盲测集。"
       }
+    },
+    {
+      "id": "P06",
+      "title": "Overcoming BCR::ABL1 dependent and independent survival mechanisms in chronic myeloid leukaemia using a multi-kinase targeting approach",
+      "doi": "10.1186/s12964-023-01363-2",
+      "pmid": "38031192",
+      "pmcid": "PMC10685629",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10685629/",
+      "model": "K562 and HS-5 co-culture; normal and CP-CML CD34+ cells; multikinase experiments",
+      "planned_role": "training_candidate_draft_not_locked",
+      "license": {
+        "status": "source_page_identified",
+        "name": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10685629/",
+        "notes": "Europe PMC JATS 原文声明 CC BY 4.0；具体训练及分享用途、署名、版本和第三方材料尚需确认。"
+      },
+      "eligibility": "draft_samples_pending_domain_and_training_permission_review",
+      "local_asset": {
+        "format": "Europe PMC JATS XML",
+        "download_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10685629/fullTextXML",
+        "raw_path": "data/local/raw/PMC10685629.xml",
+        "index_path": "data/local/index/P06.jsonl",
+        "source_sha256": "87685f44d4a8393e4f4f7207a5a022713393f7bc8ee73847e7f20f396e73831a",
+        "paragraphs": 37,
+        "pmc_version": null,
+        "accessed_on": "2026-10-31"
+      },
+      "independence_review": {
+        "status": "preliminary_incomplete",
+        "notes": "P02/P03/P05/P06/P07 本地参考文献列表中的其他四篇 DOI/PMID/PMCID 未发现直接标识；未核对完整派生链、共享细胞、样本和补充数据，不证明研究独立。P06/P07 和部分旧论文均涉及 K562 或 Ba/F3，应进一步核对来源和实验数据。"
+      }
+    },
+    {
+      "id": "P07",
+      "title": "Antitumoral effects of cyclin-dependent kinases inhibitors CR8 and MR4 on chronic myeloid leukemia cell lines",
+      "doi": "10.1186/s12929-015-0163-x",
+      "pmid": "26184865",
+      "pmcid": "PMC4504225",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504225/",
+      "model": "K562 and KCL22 sensitive/resistant counterparts; BaF3 models; CDK inhibitors",
+      "planned_role": "source_candidate_unassigned",
+      "license": {
+        "status": "source_page_identified",
+        "name": "CC BY 4.0",
+        "license_url": "https://creativecommons.org/licenses/by/4.0/",
+        "evidence_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4504225/",
+        "notes": "Europe PMC JATS 原文声明 CC BY 4.0；具体训练及分享用途、署名、版本和第三方材料尚需确认。"
+      },
+      "eligibility": "candidate_pending_training_permission_and_research_relationship_review",
+      "local_asset": {
+        "format": "Europe PMC JATS XML",
+        "download_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4504225/fullTextXML",
+        "raw_path": "data/local/raw/PMC4504225.xml",
+        "index_path": "data/local/index/P07.jsonl",
+        "source_sha256": "f9a5b898793ae1cbb9dcfa09833e4cddc2484758ace957f66d4b46760b6cdbeb",
+        "paragraphs": 45,
+        "pmc_version": "PMC4504225.1",
+        "accessed_on": "2026-10-31"
+      },
+      "independence_review": {
+        "status": "preliminary_incomplete",
+        "notes": "P02/P03/P05/P06/P07 本地参考文献列表中的其他四篇 DOI/PMID/PMCID 未发现直接标识；未核对完整派生链、共享细胞、样本和补充数据，不证明研究独立。P06/P07 和部分旧论文均涉及 K562 或 Ba/F3，应进一步核对来源和实验数据。"
+      }
     }
   ],
   "relationship_review": {
@@ -149,7 +213,8 @@
       "P02 的竞争实验使用 Ba/F3 细胞；其研究其他部分涉及其他细胞和患者来源样本，不能仅因 Ba/F3 与 K562 不同就判定全部研究独立。",
       "已对 P02、P03 本地 JATS 参考文献列表中的 DOI/PMID 做直接文本检索，未检出其余三篇候选论文标识；这不排除间接关联、未标识引用或共享数据。",
       "P01、P04 的完整引用链和补充数据尚未做系统检查；四篇均不足以锁定有代表性的独立测试分组。",
-      "P05 与 P02、P03 的 DOI/PMID 在其 JATS 参考文献中未见相互直接引用；P05 与 P03 共用 K562 细胞系，派生与实验数据关联尚未系统审查。"
+      "P05 与 P02、P03 的 DOI/PMID 在其 JATS 参考文献中未见相互直接引用；P05 与 P03 共用 K562 细胞系，派生与实验数据关联尚未系统审查。",
+      "对 P02/P03/P05/P06/P07 本地 XML 的参考文献分别查找其他四篇 DOI/PMID/PMCID，未发现直接标识；仅属直接文本检索，未排除派生、共享细胞及实验数据等间接关联，不足以分组或认定独立。"
     ]
   }
 }
